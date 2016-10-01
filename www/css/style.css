@@ -37,3 +37,40 @@ ion-header-bar {
 .login-content .botonera p {
 	margin-top: 20px;
 }
+.login-content .botonera button {
+    background-color: transparent;
+    border: none;
+    background-size: cover;
+    height: 70px;
+    width: 70px;
+}
+.login-content .botonera button:first-child {
+	background-image: url(../img/login_facebook.png);
+}
+.login-content .botonera button:last-child {
+	background-image: url(../img/login_google.png);
+	margin-left: 20px;
+}
+.row-busqueda{
+	width: 100%;
+	display: block;
+}
+.item-busqueda{
+	width:33.3333%;
+	float: left;
+	text-align: center;
+	height: 150px;
+	border-bottom: 1px solid lightgray;
+	border-right: 1px solid lightgray;
+}
+.item-busqueda img {
+	width: 40%;
+	margin-top: 40px;
+}
+.item-busqueda p:first-child{
+	height: 100px;
+}
+
+.item-busqueda p:nth-child(2){
+    font-size: 16px;
+}

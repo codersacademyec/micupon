@@ -41,9 +41,19 @@ angular.module('micupon.controllers', [])
     };
 })
 
-.controller('BusquedaCtrl', function($scope) {
-    
-})
+.controller('BusquedaCtrl', ['$scope',function(s) {
+    s.listado = [
+    {nombre: 'Pizzería', imagen:'ico_comida1'},
+    {nombre: 'Comida rápida', imagen:'ico_comida2'},
+    {nombre: 'Rotisería', imagen:'ico_comida3'},
+    {nombre: 'Desayunos', imagen:'ico_comida4'},
+    {nombre: 'Restaurante', imagen:'ico_comida5'},
+    {nombre: 'Sushi', imagen:'ico_comida6'},
+    {nombre: 'Casa de té', imagen:'ico_comida7'},
+    {nombre: 'Cervecería', imagen:'ico_comida8'},
+    {nombre: 'Bares', imagen:'ico_comida9'}
+    ];
+}])
 
 .controller('MapaCtrl', ['$scope','$rootScope','$cordovaGeolocation','$ionicLoading', function(s,r,$cordovaGeolocation,$ionicLoading) {
   s.location = $cordovaGeolocation;
