@@ -51,9 +51,20 @@ ion-header-bar {
 	background-image: url(../img/login_google.png);
 	margin-left: 20px;
 }
-.row-busqueda{
+.row-busqueda,.lista-cupones{
 	width: 100%;
 	display: block;
+}
+.item-cupon{
+	float: left;
+	text-align: center;
+	width: 48%;
+    margin: 1%;
+	height: 180px;
+	border:none;
+}
+.item-cupon img {
+	width: 100%;
 }
 .item-busqueda{
 	width:33.3333%;
@@ -66,6 +77,10 @@ ion-header-bar {
 .item-busqueda img {
 	width: 40%;
 	margin-top: 40px;
+}
+.item-busqueda a,.item-cupon a {
+	padding: 0 !important;
+	height: 100%;
 }
 .item-busqueda p:first-child{
 	height: 100px;

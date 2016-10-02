@@ -1,10 +1,10 @@
 <ion-view view-title="BUSCA CUPONES">
 	<ion-content>
-		<div class="row-busqueda">
-			<div ng-repeat="item in listado" class="item-busqueda" ng-style="{'border-right': $index%3==2 ? 'none' : ''}">
+		<ion-list class="row-busqueda">
+			<ion-item href="#/app/cupones" ng-repeat="item in listado" class="item-busqueda" ng-style="{'border-right': $index%3==2 ? 'none' : ''}">
 				<p><img ng-src="img/{{item.imagen}}.png"></p>
 				<p>{{item.nombre}}</p>
-			</div>
-		</div>
+			</ion-item>
+		</ion-list>
 	</ion-content>
 </ion-view>

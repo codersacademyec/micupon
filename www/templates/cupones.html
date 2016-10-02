@@ -1,0 +1,10 @@
+<ion-view view-title="CUPONES">
+	<ion-content style="background-color: lightgray;">
+		<ion-list class="lista-cupones">
+			<ion-item href="#/app/cupones" ng-repeat="item in listado" class="item-cupon">
+				<p><img ng-src="img/sin_foto.png"></p>
+				<p>{{item.nombre}}</p>
+			</ion-item>
+		</ion-list>
+	</ion-content>
+</ion-view>

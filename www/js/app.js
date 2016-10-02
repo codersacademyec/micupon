@@ -48,6 +48,15 @@ angular.module('micupon', ['ionic','ngCordova', 'micupon.controllers'])
         controller: 'BusquedaCtrl'
       }
     }
+  })
+  .state('app.cupones', {
+    url: '/cupones',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/cupones.html',
+        controller: 'CuponesCtrl'
+      }
+    }
   });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/mapa');
