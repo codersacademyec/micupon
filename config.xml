@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="com.ionicframework.micupon242789" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>micupon</name>
+  <name>MiCupon</name>
   <description>
-        An Ionic Framework and Cordova project.
+        Aplicación para cupones de descuentos en tiendas ecuatorianas
     </description>
-  <author email="you@example.com" href="http://example.com.com/">
-      Your Name Here
+  <author email="comercial@u4innovation.com" href="http://www.u4innovation.com">
+      U4innovation
     </author>
   <content src="index.html"/>
   <access origin="*"/>

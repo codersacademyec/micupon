@@ -1,7 +1,7 @@
 {
-  "name": "micupon",
+  "name": "MiCupon",
   "version": "1.1.1",
-  "description": "micupon: An Ionic project",
+  "description": "MiCupon: An Ionic project",
   "dependencies": {
     "gulp": "^3.5.6",
     "gulp-sass": "^2.0.4",
