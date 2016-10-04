@@ -106,9 +106,12 @@ angular.module('micupon.controllers', [])
             enableHighAccuracy: true
         };
         s.location.getCurrentPosition(options).then(function(position) {
-            r.lat = position.coords.latitude;
-            r.long = position.coords.longitude;
-            var latLong = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            //r.lat = position.coords.latitude;
+            //r.long = position.coords.longitude;
+            r.lat= -0.149194; 
+            r.long= -78.494278;
+            //var latLong = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            var latLong = new google.maps.LatLng(r.lat, r.long);
             s.map.setCenter(latLong);
             s.map.setZoom(15);
             if (s.markerLocation) {
@@ -134,6 +137,7 @@ angular.module('micupon.controllers', [])
     }
 
     s.localesCercanosMarker = [];
+    s.nombreLocal =[];
     s.consultarLocales = function() {
                 $ionicLoading.show({
                     template: 'Buscando...'
@@ -145,14 +149,33 @@ angular.module('micupon.controllers', [])
                         s.removeLocalesMarkers();
                         for (var i = 0; i < res.data.length; i++) {
                             var coord = res.data[i]._geolocation.coordinates;
+                            s.nombreLocal[i] = res.data[i].nombre;
+                            console.log(i+" "+s.nombreLocal[i]);
                             s.localesCercanosMarker.push(new google.maps.Marker({
                                 position: new google.maps.LatLng(coord[1], coord[0]),
                                 map: s.map,
-                                icon: 'img/EstacionamientosIcon_.png',
+                                title: res.data[i].nombre,
                                 array_pos: i
                             }));
+
+                            s.localesCercanosMarker[i].addListener('click', function() {
+                                s.localSeleccionado = s.localesCercanos[this.array_pos];
+                                s.coord = s.localSeleccionado._geolocation.coordinates;
+                                var contentString = '<div id="content">'+
+                                  '<div id="siteNotice">'+
+                                  '</div>'+
+                                  '<b>'+s.localSeleccionado.nombre+'</b>'+
+                                  '<p>'+'Comercio asociado MiCupon'+'</p>'+
+                                  '</div>';
+                                var infowindow = new google.maps.InfoWindow({
+                                content: contentString
+                                });
+                                console.log(this.array_pos);
+                                infowindow.open(s.map, s.localesCercanosMarker[this.array_pos]);
+                              });
                             
                         }
+
                         $ionicLoading.hide();
                     });
     }
