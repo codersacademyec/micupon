@@ -116,7 +116,8 @@ angular.module('micupon.controllers', [])
             }
             s.markerLocation = new google.maps.Marker({
                 position: latLong,
-                map: s.map
+                map: s.map,
+                icon: 'img/UbicacionUsuario_.png'
             });
             s.circulo(s.markerLocation);
             if (s.markerBusqueda) s.markerBusqueda.setMap(null);
@@ -124,10 +125,42 @@ angular.module('micupon.controllers', [])
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
             };
+            s.consultarLocales();
             $ionicLoading.hide();
 
         }, function(error) {
             console.log(error.message);
         })
     }
+
+    s.localesCercanosMarker = [];
+    s.consultarLocales = function() {
+                $ionicLoading.show({
+                    template: 'Buscando...'
+                });
+                Stamplay.Query('object', 'locales')
+                    .near('Point', [s.currPos.lng, s.currPos.lat], s.radioBusqueda)
+                    .exec().then(function(res) {
+                        s.localesCercanos = res.data;
+                        s.removeLocalesMarkers();
+                        for (var i = 0; i < res.data.length; i++) {
+                            var coord = res.data[i]._geolocation.coordinates;
+                            s.localesCercanosMarker.push(new google.maps.Marker({
+                                position: new google.maps.LatLng(coord[1], coord[0]),
+                                map: s.map,
+                                icon: 'img/EstacionamientosIcon_.png',
+                                array_pos: i
+                            }));
+                            
+                        }
+                        $ionicLoading.hide();
+                    });
+    }
+    s.removeLocalesMarkers = function() {
+                for (var i = 0; i < s.localesCercanosMarker.length; i++) {
+                    s.localesCercanosMarker[i].setMap(null)
+                }
+                s.localesCercanosMarker = [];
+    }
+
 }]);
