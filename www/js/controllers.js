@@ -73,7 +73,8 @@ angular.module('micupon.controllers', [])
         s.map = map;
     };
     s.iniciarMapa = function($element) {
-        var mapOptions = {
+        
+	var mapOptions = {
             zoom: 16,
             mapTypeId: google.maps.MapTypeId.ROADMAP,
             disableDefaultUI: true

@@ -10,7 +10,7 @@ angular.module('micupon', ['ionic','ngCordova', 'micupon.controllers', 'micupon.
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
-    
+    console.log("holaentrada");
 
     if (window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -21,15 +21,18 @@ angular.module('micupon', ['ionic','ngCordova', 'micupon.controllers', 'micupon.
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+					   console.log("hola");
+					   window.plugins.OneSignal.setLogLevel({logLevel: 4, visualLevel: 4});
 					   var notificationOpenedCallback = function(jsonData) {
+					   alert("Notification received:\n" + JSON.stringify(jsonData));
 					   console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
 					   };
-					   
+					   console.log("hola1");
 					   window.plugins.OneSignal
 					   .startInit("9c796239-b48c-4e56-a37a-76849a47dc6d", "")
 					   .handleNotificationOpened(notificationOpenedCallback)
 					   .endInit();
-					   
+					   console.log("hola2");
 					   
   });
 })
