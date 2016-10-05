@@ -10,13 +10,7 @@ angular.module('micupon', ['ionic','ngCordova', 'micupon.controllers', 'micupon.
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
-    var notificationOpenedCallback = function(jsonData) {
-      console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
-    };
-    window.plugins.OneSignal
-    .startInit("9c796239-b48c-4e56-a37a-76849a47dc6d", "")
-    .handleNotificationOpened(notificationOpenedCallback)
-    .endInit();
+    
 
     if (window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
