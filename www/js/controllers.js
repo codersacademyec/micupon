@@ -39,6 +39,8 @@ angular.module('micupon.controllers', [])
             $scope.closeLogin();
         }, 1000);
     };
+
+
 })
 
 .controller('BusquedaCtrl', ['$scope',function(s) {
@@ -73,15 +75,14 @@ angular.module('micupon.controllers', [])
         s.map = map;
     };
     s.iniciarMapa = function($element) {
-        
 	var mapOptions = {
             zoom: 16,
             mapTypeId: google.maps.MapTypeId.ROADMAP,
             disableDefaultUI: true
         };
         s.map = new google.maps.Map(document.getElementById('mapa'), mapOptions);
-        s.centrarMapa();
-    }
+        s.centrarMapa();				 
+	}
     s.circulo = function(marker) {
                 var sunCircle = {
                     strokeColor: "#62B2FC",
