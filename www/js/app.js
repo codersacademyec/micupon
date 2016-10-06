@@ -8,7 +8,7 @@ angular.module('micupon', ['ionic', 'ngCordova', 'micupon.controllers', 'micupon
 
 
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform,GeoAlert) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -30,6 +30,28 @@ angular.module('micupon', ['ionic', 'ngCordova', 'micupon.controllers', 'micupon
       console.log("My Device token:",token.token);
       push.saveToken(token);  // persist the token in the Ionic Platform
     });
+
+    //posicion de uno de los targets esto se debe reemplazar
+	//por la consulta de las posiciones de los locales en stamplay
+	//y armar un arreglo para verificar si existe un local cerca
+    var lat = -0.205611;
+    var long = -78.485556;
+    function onConfirm(idx) {
+      console.log('button '+idx+' pressed');
+    }
+    
+    GeoAlert.begin(lat,long, function() {
+      console.log('TARGET');
+      GeoAlert.end();
+      navigator.notification.confirm(
+        'You are near a target!',
+        onConfirm,
+        'Target!',
+        ['Cancel','View']
+      );
+      
+    });
+    //---fin de service
 
   });
 })

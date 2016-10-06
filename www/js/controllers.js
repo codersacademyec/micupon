@@ -108,12 +108,12 @@ angular.module('micupon.controllers', [])
             enableHighAccuracy: true
         };
         s.location.getCurrentPosition(options).then(function(position) {
-            //r.lat = position.coords.latitude;
-            //r.long = position.coords.longitude;
-            r.lat= -0.149194; 
-            r.long= -78.494278;
-            //var latLong = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-            var latLong = new google.maps.LatLng(r.lat, r.long);
+            r.lat = position.coords.latitude;
+            r.long = position.coords.longitude;
+            //r.lat= -0.205611; 
+            //r.long= -78.485556;
+            var latLong = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            //var latLong = new google.maps.LatLng(r.lat, r.long);
             s.map.setCenter(latLong);
             s.map.setZoom(15);
             if (s.markerLocation) {
@@ -168,6 +168,7 @@ angular.module('micupon.controllers', [])
                                   '</div>'+
                                   '<b>'+s.localSeleccionado.nombre+'</b>'+
                                   '<p>'+'Comercio asociado MiCupon'+'</p>'+
+                                  '<p>'+'Cupones disponibles: '+ '<b> 1 </b>'+'</p>'+
                                   '</div>';
                                 var infowindow = new google.maps.InfoWindow({
                                 content: contentString
