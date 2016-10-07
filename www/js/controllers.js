@@ -69,7 +69,7 @@ angular.module('micupon.controllers', [])
     {nombre: 'Bares', imagen:'ico_comida9'}
     ];
 }])
-.controller('MapaCtrl', ['$scope','$rootScope','$cordovaGeolocation','$ionicLoading', function(s,r,$cordovaGeolocation,$ionicLoading) {
+.controller('MapaCtrl', ['$scope','$rootScope','$cordovaGeolocation','$ionicLoading','$timeout', function(s,r,$cordovaGeolocation,$ionicLoading,$timeout) {
   s.location = $cordovaGeolocation;
     s.mapCreated = function(map) {
         s.map = map;
@@ -99,6 +99,14 @@ angular.module('micupon.controllers', [])
                 s.cityCircle = new google.maps.Circle(sunCircle);
                 s.cityCircle.bindTo('center', marker, 'position');
             }
+    s.tracking = function(){
+        $timeout(function(){
+            console.log('consultando location');
+            s.location.getCurrentPosition(options).then(function(position) {
+                s.tracking();
+            });
+        },5000);
+    }
     s.centrarMapa = function() {
         /*$ionicLoading.show({
             template: 'Cargando...'
@@ -145,7 +153,7 @@ angular.module('micupon.controllers', [])
                     template: 'Buscando...'
                 });
                 Stamplay.Query('object', 'locales')
-                    .near('Point', [s.currPos.lng, s.currPos.lat], s.radioBusqueda)
+                    .near('Point', [s.currPos.lng, s.currPos.lat], 1500)
                     .exec().then(function(res) {
                         s.localesCercanos = res.data;
                         s.removeLocalesMarkers();
@@ -188,5 +196,44 @@ angular.module('micupon.controllers', [])
                 }
                 s.localesCercanosMarker = [];
     }
+document.addEventListener('deviceready', onDeviceReady, false);
 
+function onDeviceReady () {
+
+    /**
+    * This callback will be executed every time a geolocation is recorded in the background.
+    */
+    var callbackFn = function(location) {
+        console.log('[js] BackgroundGeolocation callback:  ' + location.latitude + ',' + location.longitude);
+        var latLong = new google.maps.LatLng(location.latitude, location.longitude);
+        s.map.setCenter(latLong);
+        if (s.markerLocation) {
+                s.markerLocation.setMap(null);
+            }
+            s.markerLocation = new google.maps.Marker({
+                position: latLong,
+                map: s.map,
+                icon: 'img/UbicacionUsuario_.png'
+            });
+        backgroundGeolocation.finish();
+    };
+
+    var failureFn = function(error) {
+        console.log('BackgroundGeolocation error');
+    };
+
+    // BackgroundGeolocation is highly configurable. See platform specific configuration options
+    backgroundGeolocation.configure(callbackFn, failureFn, {
+        desiredAccuracy: 10,
+        stationaryRadius: 20,
+        distanceFilter: 30,
+        interval: 60000
+    });
+
+    // Turn ON the background-geolocation system.  The user will be tracked whenever they suspend the app.
+    backgroundGeolocation.start();
+
+    // If you wish to turn OFF background-tracking, call the #stop method.
+    // backgroundGeolocation.stop();
+}
 }]);
