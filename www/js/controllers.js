@@ -69,7 +69,7 @@ angular.module('micupon.controllers', [])
     {nombre: 'Bares', imagen:'ico_comida9'}
     ];
 }])
-.controller('MapaCtrl', ['$scope','$rootScope','$cordovaGeolocation','$ionicLoading','$timeout', function(s,r,$cordovaGeolocation,$ionicLoading,$timeout) {
+.controller('MapaCtrl', ['$scope','$rootScope','$cordovaGeolocation','$ionicLoading','$ionicPopup', function(s,r,$cordovaGeolocation,$ionicLoading,$ionicPopup) {
   s.location = $cordovaGeolocation;
     s.mapCreated = function(map) {
         s.map = map;
@@ -99,14 +99,6 @@ angular.module('micupon.controllers', [])
                 s.cityCircle = new google.maps.Circle(sunCircle);
                 s.cityCircle.bindTo('center', marker, 'position');
             }
-    s.tracking = function(){
-        $timeout(function(){
-            console.log('consultando location');
-            s.location.getCurrentPosition(options).then(function(position) {
-                s.tracking();
-            });
-        },5000);
-    }
     s.centrarMapa = function() {
         /*$ionicLoading.show({
             template: 'Cargando...'
@@ -138,7 +130,7 @@ angular.module('micupon.controllers', [])
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
             };
-            s.consultarLocales();
+            s.consultarLocales(1500);
             $ionicLoading.hide();
 
         }, function(error) {
@@ -148,12 +140,12 @@ angular.module('micupon.controllers', [])
 
     s.localesCercanosMarker = [];
     s.nombreLocal =[];
-    s.consultarLocales = function() {
+    s.consultarLocales = function(dist) {
                 $ionicLoading.show({
                     template: 'Buscando...'
                 });
                 Stamplay.Query('object', 'locales')
-                    .near('Point', [s.currPos.lng, s.currPos.lat], 1500)
+                    .near('Point', [s.currPos.lng, s.currPos.lat], dist)
                     .exec().then(function(res) {
                         s.localesCercanos = res.data;
                         s.removeLocalesMarkers();
@@ -186,6 +178,15 @@ angular.module('micupon.controllers', [])
                               });
                             
                         }
+                        if(res.data.length > 0){
+                            $ionicPopup.alert({
+                             title: 'Se encontraron ofertas cercanas!',
+                             buttons: [{
+                                text: 'Aceptar',
+                                type: 'button-positive'
+                              }]
+                           });
+                        }
 
                         $ionicLoading.hide();
                     });
@@ -196,6 +197,19 @@ angular.module('micupon.controllers', [])
                 }
                 s.localesCercanosMarker = [];
     }
+    s.checkDistance = function(lat1,lon1,lat2,lon2){
+        var R = 6371; // km
+        var dLat = (lat2-lat1)* (Math.PI / 180);
+        var dLon = (lon2-lon1)* (Math.PI / 180);
+        var lat1 = lat1* (Math.PI / 180);
+        var lat2 = lat2* (Math.PI / 180);
+
+        var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+        return R * c;
+    }
+    s.coords = []
 document.addEventListener('deviceready', onDeviceReady, false);
 
 function onDeviceReady () {
@@ -215,6 +229,11 @@ function onDeviceReady () {
                 map: s.map,
                 icon: 'img/UbicacionUsuario_.png'
             });
+            s.coords.push({lat:location.latitude,long:location.longitude})
+            if(s.checkDistance(s.coords[0].lat,s.coords[0].long,location.latitude, location.longitude) >= 0.5){
+                s.coords = [];
+                s.consultarLocales(500);
+            }
         backgroundGeolocation.finish();
     };
 
