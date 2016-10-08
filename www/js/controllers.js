@@ -91,7 +91,7 @@ angular.module('micupon.controllers', [])
                     fillColor: "#62B2FC",
                     fillOpacity: 0.35,
                     map: s.map,
-                    radius: s.radioBusqueda // in meters
+                    radius: 500 // in meters
                 };
                 if (s.cityCircle) {
                     s.cityCircle.setMap(null);
@@ -230,6 +230,7 @@ function onDeviceReady () {
                 icon: 'img/UbicacionUsuario_.png'
             });
             s.coords.push({lat:location.latitude,long:location.longitude})
+            s.circulo(s.markerLocation);
             if(s.checkDistance(s.coords[0].lat,s.coords[0].long,location.latitude, location.longitude) >= 0.5){
                 s.coords = [];
                 s.currPos = {
