@@ -232,6 +232,10 @@ function onDeviceReady () {
             s.coords.push({lat:location.latitude,long:location.longitude})
             if(s.checkDistance(s.coords[0].lat,s.coords[0].long,location.latitude, location.longitude) >= 0.5){
                 s.coords = [];
+                s.currPos = {
+                lat: location.latitude,
+                lng: location.longitude
+            };
                 s.consultarLocales(500);
             }
         backgroundGeolocation.finish();
