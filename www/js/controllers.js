@@ -1,44 +1,61 @@
 angular.module('micupon.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($ionicModal, AccountService, $state, $scope, $rootScope, $ionicLoading, $ionicPopup, socialProvider, $timeout) {
 
-    // With the new view caching in Ionic, Controllers are only called
-    // when they are recreated or on app start, instead of every page change.
-    // To listen for when this page is active (for example, to refresh data),
-    // listen for the $ionicView.enter event:
-    //$scope.$on('$ionicView.enter', function(e) {
-    //});
-
-    // Form data for the login modal
-    $scope.loginData = {};
-
-    // Create the login modal that we will use later
+    $rootScope.loginData = {};
     $ionicModal.fromTemplateUrl('templates/login.html', {
-        scope: $scope
+        scope: $rootScope
     }).then(function(modal) {
-        $scope.modal = modal;
+        $rootScope.modal = modal;
     });
-
-    // Triggered in the login modal to close it
-    $scope.closeLogin = function() {
-        $scope.modal.hide();
+    $rootScope.closeLogin = function() {
+        $rootScope.modal.hide();
+    };
+    $rootScope.showLogin = function() {
+        $rootScope.modal.show();
+    };
+    $rootScope.login = function(i) {
+        Stamplay.User.socialLogin(socialProvider[i])
     };
 
-    // Open the login modal
-    $scope.login = function() {
-        $scope.modal.show();
-    };
-
-    // Perform the login action when the user submits the login form
-    $scope.doLogin = function() {
-        console.log('Doing login', $scope.loginData);
-
-        // Simulate a login delay. Remove this and replace with your login
-        // code if using a login system
-        $timeout(function() {
-            $scope.closeLogin();
-        }, 1000);
-    };
+    $rootScope.logout = function() {
+        $ionicLoading.show();
+        var jwt = window.location.origin + "-jwt";
+        window.localStorage.removeItem(jwt);
+        AccountService.currentUser()
+        .then(function(user) {
+            $rootScope.user = user;
+            $rootScope.showLogin();
+            $ionicLoading.hide();
+        }, function(error) {
+            console.error(error);
+            $ionicLoading.hide();
+            $state.go($state.current, {}, {reload: true});
+        })
+    }
+    $rootScope.user = {"_id":"57b7ac4fe1af8c0434720491","appId":"miparqueo","displayName":"Gonzalo Aller","name":{"familyName":"Aller","givenName":"Gonzalo"},"pictures":{"facebook":"https://graph.facebook.com/10210477627084919/picture"},"givenRole":"57af24c32e101f405ecebd4a","email":"gonzaller@me.com","identities":{"facebook":{"facebookUid":"10210477627084919","_json":{"timezone":-3,"first_name":"Gonzalo","last_name":"Aller","locale":"es_LA","picture":{"data":{"url":"https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/13322155_10209828060006148_4865973369382732877_n.jpg?oh=44baf6b5e046137288fd83c114b491d0&oe=5856DB75","is_silhouette":false}},"link":"https://www.facebook.com/app_scoped_user_id/10210477627084919/","gender":"male","email":"gonzaller@me.com","age_range":{"min":21},"name":"Gonzalo Aller","id":"10210477627084919"},"emails":[{"value":"gonzaller@me.com"}],"accessToken":"EAAIjuROBonoBAPZA6EgZCsmhgJZC7OdA2sTOnDXxTijYRmMPpgCgn3eBx2p9msnBO6UZAGrM6HOZBDLxBqkSz16WeuWDvzKMiQCWAEXpNEpDDaNfd3FOabVQ1nZCo3xrZCfOD5MtgLy6Io8ZBArZCukjuj86T1dXzCSgZD"}},"__v":0,"dt_update":"2016-08-28T23:28:18.400Z","dt_create":"2016-08-20T01:03:11.170Z","emailVerified":true,"verificationCode":"907089e2acc08ad816d3","profileImg":"https://graph.facebook.com/10210477627084919/picture","id":"57b7ac4fe1af8c0434720491"};
+    AccountService.currentUser()
+    .then(function(user) {
+        if (user || $rootScope.user) {
+            $rootScope.user = user ? user : $rootScope.user;
+            Stamplay.Object("usuarios").get({
+                owner: $rootScope.user._id
+            })
+            .then(function(res) {
+                $rootScope.user.perfil = res.data[0];
+                Stamplay.Object("usuarios").patch($rootScope.user.perfil.id, {push_token:$rootScope.push_token})
+                    .then(function(res) {
+                      // success
+                    }, function(err) {
+                      // error
+                    })
+            }, function(err) {
+                        // Error
+                    });
+        } else {
+            $rootScope.showLogin();
+        }
+    })
 
 
 })

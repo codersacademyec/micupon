@@ -20,6 +20,11 @@
     <feature name="StatusBar">
         <param name="ios-package" onload="true" value="CDVStatusBar" />
     </feature>
+    <feature name="InAppBrowser">
+    <param name="ios-package" value="CDVInAppBrowser"/>
+    <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser"/>
+  </feature>
+    <allow-navigation href="*" />
     <platform name="ios">
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
         <icon height="114" src="resources/ios/icon/icon@2x.png" width="114" />
@@ -54,5 +59,5 @@
     <plugin name="phonegap-plugin-push" spec="~1.8.2">
         <variable name="SENDER_ID" value="12341234" />
     </plugin>
-
+    <plugin name="cordova-plugin-inappbrowser" spec="~1.5.0" />
 </widget>
