@@ -18,7 +18,7 @@
     </ion-header-bar>
     <ion-content>
       <ion-list>
-        <ion-item menu-close ng-click="showLogin()">
+        <ion-item ng-if="!user" menu-close ng-click="showLogin()">
           LOGIN
         </ion-item>
         <ion-item menu-close href="#/app/busqueda">
@@ -28,6 +28,7 @@
           MAPA DE LOCALES
         </ion-item>
       </ion-list>
+      <button ng-if="user" ng-click="logout()" class="button button-full button-stable bold">Salir</button>
     </ion-content>
   </ion-side-menu>
 </ion-side-menus>
