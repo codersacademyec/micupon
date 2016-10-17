@@ -241,6 +241,10 @@ s.circulo = function(marker) {
     var callbackFn = function(location) {
         console.log('[js] BackgroundGeolocation callback:  ' + location.latitude + ',' + location.longitude);
         var latLong = new google.maps.LatLng(location.latitude, location.longitude);
+        $http.post('https://micupon.stamplayapp.com/api/codeblock/v1/run/pushcercanos',{
+                    "token" : $rootScope.push_token,
+                    "mensaje" : "prueba push"
+                });
         s.map.setCenter(latLong);
         if (s.markerLocation) {
             s.markerLocation.setMap(null);
