@@ -36,55 +36,35 @@ angular.module('micupon.controllers', [])
             })
     }
     $rootScope.user = {
-        "_id": "57b7ac4fe1af8c0434720491",
-        "appId": "miparqueo",
-        "displayName": "Gonzalo Aller",
-        "name": {
-            "familyName": "Aller",
-            "givenName": "Gonzalo"
-        },
-        "pictures": {
-            "facebook": "https://graph.facebook.com/10210477627084919/picture"
-        },
-        "givenRole": "57af24c32e101f405ecebd4a",
-        "email": "gonzaller@me.com",
-        "identities": {
-            "facebook": {
-                "facebookUid": "10210477627084919",
-                "_json": {
-                    "timezone": -3,
-                    "first_name": "Gonzalo",
-                    "last_name": "Aller",
-                    "locale": "es_LA",
-                    "picture": {
-                        "data": {
-                            "url": "https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/13322155_10209828060006148_4865973369382732877_n.jpg?oh=44baf6b5e046137288fd83c114b491d0&oe=5856DB75",
-                            "is_silhouette": false
-                        }
-                    },
-                    "link": "https://www.facebook.com/app_scoped_user_id/10210477627084919/",
-                    "gender": "male",
-                    "email": "gonzaller@me.com",
-                    "age_range": {
-                        "min": 21
-                    },
-                    "name": "Gonzalo Aller",
-                    "id": "10210477627084919"
-                },
-                "emails": [{
-                    "value": "gonzaller@me.com"
-                }],
-                "accessToken": "EAAIjuROBonoBAPZA6EgZCsmhgJZC7OdA2sTOnDXxTijYRmMPpgCgn3eBx2p9msnBO6UZAGrM6HOZBDLxBqkSz16WeuWDvzKMiQCWAEXpNEpDDaNfd3FOabVQ1nZCo3xrZCfOD5MtgLy6Io8ZBArZCukjuj86T1dXzCSgZD"
-            }
-        },
-        "__v": 0,
-        "dt_update": "2016-08-28T23:28:18.400Z",
-        "dt_create": "2016-08-20T01:03:11.170Z",
-        "emailVerified": true,
-        "verificationCode": "907089e2acc08ad816d3",
-        "profileImg": "https://graph.facebook.com/10210477627084919/picture",
-        "id": "57b7ac4fe1af8c0434720491"
-    };
+  "_id": "57fec0700d63f676601f24ac",
+  "sexo": "male",
+  "nombre": "Gonzalo",
+  "email": "gonzaller@gmail.com",
+  "apellido": "Aller",
+  "owner": "57feba3ca3b12b294d4891c0",
+  "appId": "micupon",
+  "cobjectId": "usuarios",
+  "actions": {
+    "comments": [],
+    "ratings": {
+      "users": [],
+      "avg": 0,
+      "total": 0
+    },
+    "votes": {
+      "users_downvote": [],
+      "users_upvote": [],
+      "users": [],
+      "total": 0
+    }
+  },
+  "dt_update": "2016-10-18T00:44:53.929Z",
+  "dt_create": "2016-10-12T23:00:00.844Z",
+  "push_token": "62fd3d375167014fbc29a812704fb29a5bd6c0a4d791436dd56a5c7d209e4532",
+  "id": "57fec0700d63f676601f24ac"
+}
+
+;
     AccountService.currentUser()
         .then(function(user) {
             if (user || $rootScope.user) {
@@ -173,6 +153,29 @@ angular.module('micupon.controllers', [])
             imagen: 'ico_comida9'
         }];
     }])
+    .controller('MiscuponesCtrl', ['$scope','$rootScope','$ionicLoading', function(s,r,$ionicLoading) {
+        s.listado = [];
+        
+          s.refresh = function(){
+            $ionicLoading.show({
+            template: 'Buscando...'
+        });
+            Stamplay.Object("cupones_usuarios")
+          .get({usuario:r.user._id,populate : true})
+          .then(function(res) {
+            s.resp = res.data[0].codigos;
+            s.listado = [];
+            for (var i = 0; i < s.resp.length; i++) {
+                s.listado.push({titulo:s.resp[i].titulo,imagen:s.resp[i].nombre_img,promocion:s.resp[i].promocion});
+            }
+            $ionicLoading.hide();
+            s.$broadcast('scroll.refreshComplete');
+          }, function(err) {
+            // Handle Error
+          });    
+          };
+          s.refresh();
+    }])
     .controller('MapaCtrl', ['$scope', '$rootScope', '$cordovaGeolocation', '$ionicLoading', '$ionicPopup', '$http', function(s, r, $cordovaGeolocation, $ionicLoading, $ionicPopup, $http) {
         s.location = $cordovaGeolocation;
         s.mapCreated = function(map) {
@@ -223,11 +226,9 @@ angular.module('micupon.controllers', [])
                 if (s.markerLocation) {
                     s.markerLocation.setMap(null);
                 }
-                s.markerLocation = new google.maps.Marker({
-                    position: latLong,
-                    map: s.map,
-                    icon: 'img/UbicacionUsuario_.png'
-                });
+                s.markerLocation = new CustomMarker(
+                latLong,
+                s.map,{});
                 s.circulo(s.markerLocation);
                 if (s.markerBusqueda) s.markerBusqueda.setMap(null);
                 s.currPos = {
@@ -344,11 +345,9 @@ angular.module('micupon.controllers', [])
                 if (s.markerLocation) {
                     s.markerLocation.setMap(null);
                 }
-                s.markerLocation = new google.maps.Marker({
-                    position: latLong,
-                    map: s.map,
-                    icon: 'img/UbicacionUsuario_.png'
-                });
+                s.markerLocation = new CustomMarker(
+                latLong,
+                s.map,{});
                 s.coords.push({
                     lat: location.latitude,
                     long: location.longitude
@@ -386,3 +385,50 @@ angular.module('micupon.controllers', [])
             // backgroundGeolocation.stop();
         }
     }]);
+function CustomMarker(latlng, map, args) {
+    this.latlng = latlng;   
+    this.args = args;   
+    this.setMap(map);   
+}
+
+CustomMarker.prototype = new google.maps.OverlayView();
+
+CustomMarker.prototype.draw = function() {
+    
+    var self = this;
+    
+    var div = this.div;
+    
+    if (!div) {
+        var template = document.createElement('template');
+        template.innerHTML = '<div class="ch-container"><div class="ch-item"></div><div class="ch-middle"></div></div>';
+        div = this.div = template.content.firstChild;
+        div.style.position = 'absolute';
+        div.style.cursor = 'pointer';
+        div.style.width = '20px';
+        div.style.height = '20px';
+        if (typeof(self.args.marker_id) !== 'undefined') {
+            div.dataset.marker_id = self.args.marker_id;
+        }       
+        var panes = this.getPanes();
+        panes.overlayImage.appendChild(div);
+    }
+    
+    var point = this.getProjection().fromLatLngToDivPixel(this.latlng);
+    
+    if (point) {
+        div.style.left = (point.x - 10) + 'px';
+        div.style.top = (point.y - 20) + 'px';
+    }
+};
+
+CustomMarker.prototype.remove = function() {
+    if (this.div) {
+        this.div.parentNode.removeChild(this.div);
+        this.div = null;
+    }   
+};
+
+CustomMarker.prototype.getPosition = function() {
+    return this.latlng; 
+};

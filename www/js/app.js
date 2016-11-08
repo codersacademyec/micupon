@@ -41,6 +41,15 @@ angular.module('micupon', ['ionic', 'ngCordova', 'micupon.controllers', 'micupon
       }
     }
   })
+  .state('app.miscupones', {
+    url: '/miscupones',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/miscupones.html',
+        controller: 'MiscuponesCtrl'
+      }
+    }
+  })
   .state('app.busqueda', {
     url: '/busqueda',
     views: {

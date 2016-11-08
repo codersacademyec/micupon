@@ -13,8 +13,8 @@ angular.module('micupon.services', [])
                         }
                     }, function(error) {
                         def.reject();
-                    })
+                    });
                 return def.promise;
             }
-        }
+        };
     }]);

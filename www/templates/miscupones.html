@@ -1,0 +1,15 @@
+<ion-view view-title="MIS CUPONES">
+	<ion-content style="background-color: lightgray;">
+	<ion-refresher
+    pulling-text="Actualizar cupones..."
+    on-refresh="refresh()">
+  </ion-refresher>
+		<ion-list class="lista-cupones">
+			<ion-item ng-repeat="item in listado" class="item-cupon" style="padding:0;">
+				<p><img ng-src="http://micupon.stamplayapp.com/img/{{item.imagen}}"></p>
+				<p>{{item.titulo}}</p>
+				<p>{{item.promocion}}</p>
+			</ion-item>
+		</ion-list>
+	</ion-content>
+</ion-view>
