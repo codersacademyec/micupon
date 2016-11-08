@@ -195,7 +195,7 @@ angular.module('micupon.controllers', [])
                 fillColor: "#62B2FC",
                 fillOpacity: 0.35,
                 map: s.map,
-                radius: 50 // in meters
+                radius: 500 // in meters
             };
             if (s.cityCircle) {
                 s.cityCircle.setMap(null);
@@ -234,7 +234,7 @@ angular.module('micupon.controllers', [])
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
                 };
-                s.consultarLocales(50);
+                s.consultarLocales(500);
                 $ionicLoading.hide();
 
             }, function(error) {
@@ -339,7 +339,7 @@ angular.module('micupon.controllers', [])
                 console.log('[js] BackgroundGeolocation callback:  ' + location.latitude + ',' + location.longitude);
                 var latLong = new google.maps.LatLng(location.latitude, location.longitude);
 
-                s.sendPush();
+                //s.sendPush();
                 s.map.setCenter(latLong);
                 if (s.markerLocation) {
                     s.markerLocation.setMap(null);
@@ -355,14 +355,14 @@ angular.module('micupon.controllers', [])
                 })
                 s.circulo(s.markerLocation);
 				console.log('Chequea distancia 50 metros');
-				if (s.checkDistance(s.coords[0].lat, s.coords[0].long, location.latitude, location.longitude) >= 0.5) {
-					console.log('Distancia verificada >0.5');
+				if (s.checkDistance(s.coords[0].lat, s.coords[0].long, location.latitude, location.longitude) >= 0.05) {
+					console.log('Distancia verificada >0.05');
 					s.coords = [];
                     s.currPos = {
                         lat: location.latitude,
                         lng: location.longitude
                     };
-                    s.consultarLocales(50);
+                    s.consultarLocales(500);
                 }
                 backgroundGeolocation.finish();
             };
