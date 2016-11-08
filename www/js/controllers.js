@@ -35,7 +35,7 @@ angular.module('micupon.controllers', [])
                 });
             })
     }
-    $rootScope.user = {
+    /*$rootScope.user = {
   "_id": "57fec0700d63f676601f24ac",
   "sexo": "male",
   "nombre": "Gonzalo",
@@ -62,9 +62,7 @@ angular.module('micupon.controllers', [])
   "dt_create": "2016-10-12T23:00:00.844Z",
   "push_token": "62fd3d375167014fbc29a812704fb29a5bd6c0a4d791436dd56a5c7d209e4532",
   "id": "57fec0700d63f676601f24ac"
-}
-
-;
+};*/
     AccountService.currentUser()
         .then(function(user) {
             if (user || $rootScope.user) {
@@ -155,7 +153,9 @@ angular.module('micupon.controllers', [])
     }])
     .controller('MiscuponesCtrl', ['$scope','$rootScope','$ionicLoading', function(s,r,$ionicLoading) {
         s.listado = [];
-        
+        s.$on('$ionicView.afterEnter', function() {
+            s.refresh();
+        });
           s.refresh = function(){
             $ionicLoading.show({
             template: 'Buscando...'
