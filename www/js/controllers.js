@@ -167,12 +167,12 @@ angular.module('micupon.controllers', [])
                 $ionicLoading.show({
                     template: 'Buscando...'
                 });
-                Stamplay.Object("cupones_usuarios")
-                    .get({
-                        usuario: r.user._id,
+
+                Stamplay.Object("cupones_usuarios").get({
+                        usuario: r.user.perfil._id,
                         populate: true
-                    })
-                    .then(function(res) {
+                    }).then(function(res) {
+                        console.log(res);
                         s.resp = res.data[0].codigos;
                         s.listado = [];
                         for (var i = 0; i < s.resp.length; i++) {
@@ -189,7 +189,6 @@ angular.module('micupon.controllers', [])
                     });
             }
         };
-        s.refresh();
     }])
     .controller('MapaCtrl', ['$scope', '$rootScope', '$cordovaGeolocation', '$ionicLoading', '$ionicPopup', '$http', function(s, r, $cordovaGeolocation, $ionicLoading, $ionicPopup, $http) {
         s.location = $cordovaGeolocation;
