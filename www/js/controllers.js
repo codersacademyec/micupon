@@ -171,7 +171,7 @@ angular.module('micupon.controllers', [])
             $ionicLoading.hide();
             s.$broadcast('scroll.refreshComplete');
           }, function(err) {
-            // Handle Error
+            $ionicLoading.hide();
           });    
           };
           s.refresh();
